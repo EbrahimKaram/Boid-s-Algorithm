@@ -115,6 +115,35 @@
             font-family: monospace;
         }
 
+        .presets {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .presets button {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ccc;
+            padding: 8px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .presets button:hover {
+            background: #00ff88;
+            color: #000;
+            border-color: #00ff88;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        }
+
         /* Custom Range Slider */
         input[type=range] {
             -webkit-appearance: none; 
@@ -174,6 +203,12 @@
     <!-- Controls Overlay -->
     <div id="controls">
         <h3>Parameters</h3>
+
+        <div class="presets">
+            <button id="btnFish">Fish</button>
+            <button id="btnBirds">Birds</button>
+            <button id="btnInsects">Insects</button>
+        </div>
 
         <div class="control-group">
             <label for="numBoids">Count <span id="numBoidsValue">100</span></label>
@@ -397,6 +432,72 @@
             separationFactor = +this.value;
             document.getElementById('separationFactorValue').textContent = separationFactor.toFixed(1);
         });
+
+        // Presets Logic
+        const presets = {
+            fish: {
+                numBoids: 300,
+                boidSpeed: 0.2,
+                perceptionRadius: 5,
+                alignmentFactor: 1.0,
+                cohesionFactor: 1.0,
+                separationFactor: 0.8
+            },
+            birds: {
+                numBoids: 150,
+                boidSpeed: 0.35,
+                perceptionRadius: 10,
+                alignmentFactor: 0.8,
+                cohesionFactor: 0.5,
+                separationFactor: 1.5
+            },
+            insects: {
+                numBoids: 500,
+                boidSpeed: 0.6,
+                perceptionRadius: 3,
+                alignmentFactor: 0.2,
+                cohesionFactor: 1.5,
+                separationFactor: 2.0
+            }
+        };
+
+        function applyPreset(type) {
+            const p = presets[type];
+            
+            // Update variables
+            numBoids = p.numBoids;
+            boidSpeed = p.boidSpeed;
+            perceptionRadius = p.perceptionRadius;
+            alignmentFactor = p.alignmentFactor;
+            cohesionFactor = p.cohesionFactor;
+            separationFactor = p.separationFactor;
+
+            // Update UI Elements
+            document.getElementById('numBoids').value = numBoids;
+            document.getElementById('numBoidsValue').textContent = numBoids;
+            
+            document.getElementById('boidSpeed').value = boidSpeed;
+            document.getElementById('boidSpeedValue').textContent = boidSpeed.toFixed(2);
+            
+            document.getElementById('perceptionRadius').value = perceptionRadius;
+            document.getElementById('perceptionRadiusValue').textContent = perceptionRadius;
+            
+            document.getElementById('alignmentFactor').value = alignmentFactor;
+            document.getElementById('alignmentFactorValue').textContent = alignmentFactor.toFixed(1);
+            
+            document.getElementById('cohesionFactor').value = cohesionFactor;
+            document.getElementById('cohesionFactorValue').textContent = cohesionFactor.toFixed(1);
+            
+            document.getElementById('separationFactor').value = separationFactor;
+            document.getElementById('separationFactorValue').textContent = separationFactor.toFixed(1);
+
+            // Re-create boids with new count
+            createBoids();
+        }
+
+        document.getElementById('btnFish').addEventListener('click', () => applyPreset('fish'));
+        document.getElementById('btnBirds').addEventListener('click', () => applyPreset('birds'));
+        document.getElementById('btnInsects').addEventListener('click', () => applyPreset('insects'));
     </script>
 </body>
 
